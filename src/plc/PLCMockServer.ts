@@ -15,7 +15,13 @@ interface ModuleConfig {
   sensors: SensorConfig[];
 }
 
+interface ServerConfig {
+  host: string;
+  port: number;
+}
+
 interface PLCConfig {
+  server: ServerConfig;
   updateIntervalMs: number;
   modules: ModuleConfig[];
 }
@@ -24,11 +30,13 @@ export class PLCMockServer {
   private modules: Module[] = [];
   private intervalId: NodeJS.Timeout | null = null;
   private updateIntervalMs: number = 1000;
+  private serverConfig: ServerConfig = { host: '127.0.0.1', port: 3000 };
 
   constructor() {
     const configPath = path.resolve(__dirname, '../../config.json');
     const config: PLCConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     this.updateIntervalMs = config.updateIntervalMs;
+    this.serverConfig = config.server;
     this.modules = config.modules.map((modConfig, idx) =>
       new Module(modConfig.name, idx + 1, modConfig.sensors)
     );
@@ -36,6 +44,7 @@ export class PLCMockServer {
 
   start() {
     console.log('PLC Mock Server started.');
+    console.log(`Server connection parameters: host=${this.serverConfig.host}, port=${this.serverConfig.port}`);
     this.intervalId = setInterval(() => {
       const now = Date.now();
       this.modules.forEach((mod) => {

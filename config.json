@@ -1,4 +1,8 @@
 {
+  "server": {
+    "host": "127.0.0.1",
+    "port": 3000
+  },
   "updateIntervalMs": 1000,
   "modules": [
     {
@@ -6,7 +10,7 @@
       "sensors": [
         { "amplitude": 10, "frequency": 0.5, "phase": 0, "dcOffset": 5 },
         { "amplitude": 8, "frequency": 0.6, "phase": 0.5, "dcOffset": 10 },
-        { "amplitude": 100, "frequency": 0.7, "phase": 1, "dcOffset": 0 }
+        { "amplitude": 12, "frequency": 0.7, "phase": 1, "dcOffset": 15 }
       ]
     },
     {
