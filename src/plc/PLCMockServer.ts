@@ -1,15 +1,10 @@
-// PLCMockServer manages modules and configuration
+// PLCMockServer manages modules, configuration, and real-time sensor updates
 import { Module } from '../module/Module';
+import { SensorConfig } from '../sensor/Sensor';
 import * as fs from 'fs';
 import * as path from 'path';
 
-interface SensorConfig {
-  amplitude: number;
-  frequency: number;
-  phase: number;
-  dcOffset: number;
-}
-
+// Types for configuration
 interface ModuleConfig {
   name: string;
   sensors: SensorConfig[];
@@ -26,12 +21,14 @@ interface PLCConfig {
   modules: ModuleConfig[];
 }
 
+// PLCMockServer: Main class for the mock PLC server
 export class PLCMockServer {
   private modules: Module[] = [];
   private intervalId: NodeJS.Timeout | null = null;
   private updateIntervalMs: number = 1000;
   private serverConfig: ServerConfig = { host: '127.0.0.1', port: 3000 };
 
+  // Load configuration and initialize modules
   constructor() {
     const configPath = path.resolve(__dirname, '../../config.json');
     const config: PLCConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
@@ -42,6 +39,7 @@ export class PLCMockServer {
     );
   }
 
+  // Start the server and begin periodic sensor updates
   start() {
     console.log('PLC Mock Server started.');
     console.log(`Server connection parameters: host=${this.serverConfig.host}, port=${this.serverConfig.port}`);
@@ -52,6 +50,7 @@ export class PLCMockServer {
         console.log(`--- ${mod.name} ---`);
         mod.sensors.forEach((sensor) => {
           const value = sensor.getValue(now);
+          // Log each sensor value with a timestamp
           console.log(`[${isoTimestamp}] ${sensor.name}: ${value.toFixed(3)}`);
         });
       });
@@ -59,6 +58,7 @@ export class PLCMockServer {
     }, this.updateIntervalMs);
   }
 
+  // Stop the server and clear the update interval
   stop() {
     if (this.intervalId) clearInterval(this.intervalId);
   }

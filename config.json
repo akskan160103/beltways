@@ -8,17 +8,17 @@
     {
       "name": "Module1",
       "sensors": [
-        { "amplitude": 10, "frequency": 0.5, "phase": 0, "dcOffset": 5 },
-        { "amplitude": 8, "frequency": 0.6, "phase": 0.5, "dcOffset": 10 },
-        { "amplitude": 12, "frequency": 0.7, "phase": 1, "dcOffset": 15 }
+        { "type": "sinusoidal", "amplitude": 10, "frequency": 0.5, "phase": 0, "dcOffset": 5 },
+        { "type": "noisy_sinusoidal", "amplitude": 8, "frequency": 0.6, "phase": 0.5, "dcOffset": 10, "noiseAmplitude": 2 },
+        { "type": "square_wave", "amplitude": 12, "frequency": 0.7, "dcOffset": 15 }
       ]
     },
     {
       "name": "Module2",
       "sensors": [
-        { "amplitude": 9, "frequency": 0.4, "phase": 0.2, "dcOffset": 6 },
-        { "amplitude": 11, "frequency": 0.55, "phase": 0.7, "dcOffset": 12 },
-        { "amplitude": 7, "frequency": 0.65, "phase": 1.2, "dcOffset": 18 }
+        { "type": "sinusoidal", "amplitude": 9, "frequency": 0.4, "phase": 0.2, "dcOffset": 6 },
+        { "type": "noisy_sinusoidal", "amplitude": 11, "frequency": 0.55, "phase": 0.7, "dcOffset": 12, "noiseAmplitude": 3 },
+        { "type": "square_wave", "amplitude": 7, "frequency": 0.65, "dcOffset": 18 }
       ]
     }
   ]
