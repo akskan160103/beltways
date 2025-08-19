@@ -47,11 +47,12 @@ export class PLCMockServer {
     console.log(`Server connection parameters: host=${this.serverConfig.host}, port=${this.serverConfig.port}`);
     this.intervalId = setInterval(() => {
       const now = Date.now();
+      const isoTimestamp = new Date(now).toISOString();
       this.modules.forEach((mod) => {
         console.log(`--- ${mod.name} ---`);
         mod.sensors.forEach((sensor) => {
           const value = sensor.getValue(now);
-          console.log(`${sensor.name}: ${value.toFixed(3)}`);
+          console.log(`[${isoTimestamp}] ${sensor.name}: ${value.toFixed(3)}`);
         });
       });
       console.log('');
