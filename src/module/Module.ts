@@ -1,20 +1,15 @@
 // Module represents an industrial unit with sensors
-import { Sensor, SinusoidalSensor } from '../sensor/Sensor';
+import { Sensor, SinusoidalSensor, SinusoidalSensorParams } from '../sensor/Sensor';
 
 export class Module {
   public sensors: Sensor[] = [];
-  constructor(public name: string, public moduleIndex: number) {
-    // Create 3 sensors per module
-    for (let i = 1; i <= 3; i++) {
+  constructor(public name: string, public moduleIndex: number, sensorConfigs: SinusoidalSensorParams[]) {
+    // Create sensors based on config
+    for (let i = 0; i < sensorConfigs.length; i++) {
       this.sensors.push(
         new SinusoidalSensor(
-          `${this.name}_Sensor${i}`,
-          {
-            amplitude: 10,
-            frequency: 0.5 + 0.1 * i, // slightly different frequency for each sensor
-            phase: 0,
-            dcOffset: 5 * i, // different DC offset for each sensor
-          }
+          `${this.name}_Sensor${i + 1}`,
+          sensorConfigs[i]
         )
       );
     }

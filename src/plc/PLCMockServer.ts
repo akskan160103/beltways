@@ -1,15 +1,37 @@
 // PLCMockServer manages modules and configuration
 import { Module } from '../module/Module';
+import * as fs from 'fs';
+import * as path from 'path';
+
+interface SensorConfig {
+  amplitude: number;
+  frequency: number;
+  phase: number;
+  dcOffset: number;
+}
+
+interface ModuleConfig {
+  name: string;
+  sensors: SensorConfig[];
+}
+
+interface PLCConfig {
+  updateIntervalMs: number;
+  modules: ModuleConfig[];
+}
 
 export class PLCMockServer {
   private modules: Module[] = [];
   private intervalId: NodeJS.Timeout | null = null;
+  private updateIntervalMs: number = 1000;
 
   constructor() {
-    // For demo: create 2 modules
-    for (let i = 1; i <= 2; i++) {
-      this.modules.push(new Module(`Module${i}`, i));
-    }
+    const configPath = path.resolve(__dirname, '../../config.json');
+    const config: PLCConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    this.updateIntervalMs = config.updateIntervalMs;
+    this.modules = config.modules.map((modConfig, idx) =>
+      new Module(modConfig.name, idx + 1, modConfig.sensors)
+    );
   }
 
   start() {
@@ -24,7 +46,7 @@ export class PLCMockServer {
         });
       });
       console.log('');
-    }, 1000); // update every second
+    }, this.updateIntervalMs);
   }
 
   stop() {
