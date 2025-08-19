@@ -30,10 +30,17 @@ export class PLCMockServer {
 
   // Load configuration and initialize modules
   constructor() {
-    const configPath = path.resolve(__dirname, '../../config.json');
+    // Allow config file path override via environment variable
+    const configPath = process.env.CONFIG_PATH
+      ? path.resolve(process.env.CONFIG_PATH)
+      : path.resolve(__dirname, '../../config.json');
     const config: PLCConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     this.updateIntervalMs = config.updateIntervalMs;
     this.serverConfig = config.server;
+    // Allow port override via environment variable
+    if (process.env.PORT) {
+      this.serverConfig.port = parseInt(process.env.PORT, 10);
+    }
     this.modules = config.modules.map((modConfig, idx) =>
       new Module(modConfig.name, idx + 1, modConfig.sensors)
     );

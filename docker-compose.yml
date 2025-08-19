@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  plc-server:
+    build: .
+    container_name: plc-mock-server
+    ports:
+      - "3000:3000"
+    environment:
+      # Example: override config file or port if needed
+      # CONFIG_PATH: /app/config.json
+      # PORT: 3000
+    command: ["npx", "ts-node", "src/server.ts"]

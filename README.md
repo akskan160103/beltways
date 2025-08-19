@@ -7,6 +7,7 @@ A simple, configurable mock PLC (Programmable Logic Controller) server that simu
 - Real-time sensor data simulation (sinusoidal pattern, fully configurable)
 - Easy configuration via `config.json`
 - Clean, extensible TypeScript codebase
+- **Docker support** for easy deployment and environment-based configuration
 
 ## Getting Started
 
@@ -28,6 +29,29 @@ npx ts-node src/server.ts
 ```
 
 You’ll see real-time sensor values for each module printed every second, with timestamps.
+
+## Docker
+
+### Build and run with Docker
+```
+docker build -t plc-mock-server .
+docker run --rm -it -p 3000:3000 plc-mock-server
+```
+
+### Using docker-compose
+```
+docker-compose up --build
+```
+
+### Environment-based configuration
+You can override the config file path and port using environment variables:
+- `CONFIG_PATH`: Path to your config file (default: `/app/config.json`)
+- `PORT`: Server port (default: `3000`)
+
+Example:
+```
+docker run --rm -it -p 3000:3000 -e CONFIG_PATH=/app/config.json -e PORT=3000 plc-mock-server
+```
 
 ## Example Output
 ```
