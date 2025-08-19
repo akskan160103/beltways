@@ -3,7 +3,9 @@ import { Sensor, SinusoidalSensor, NoisySinusoidalSensor, SquareWaveSensor, Sens
 
 export class Module {
   public sensors: Sensor[] = [];
+  public sensorConfigs: SensorConfig[] = [];
   constructor(public name: string, public moduleIndex: number, sensorConfigs: SensorConfig[]) {
+    this.sensorConfigs = sensorConfigs;
     // Create sensors based on config type
     for (let i = 0; i < sensorConfigs.length; i++) {
       const cfg = sensorConfigs[i];

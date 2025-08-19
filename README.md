@@ -4,71 +4,46 @@ A simple, configurable mock PLC (Programmable Logic Controller) server that simu
 
 ## Features
 - Modular architecture: Simulate any number of modules, each with 3 sensors
-- Real-time sensor data simulation (sinusoidal pattern, fully configurable)
+- Real-time sensor data simulation (sinusoidal, noisy sinusoidal, square wave)
 - Easy configuration via `config.json`
 - Clean, extensible TypeScript codebase
 - **Docker support** for easy deployment and environment-based configuration
+- **Dashboard**: Real-time web dashboard shows live sensor values and connection status (shows "offline" if server is not running)
 
 ## Getting Started
 
-### 1. Install dependencies
+### 1. Run with the helper script
+```
+./start-server.sh
+```
+This will install dependencies and start the server.
+
+### 2. Or run manually
 ```
 npm install
-```
-
-### 2. Configure your system
-Edit `config.json` to set:
-- Number of modules
-- Sensor parameters (amplitude, frequency, phase, DC offset)
-- Update interval (ms)
-- Server connection parameters (host, port)
-
-### 3. Run the server
-```
 npx ts-node src/server.ts
 ```
 
-You’ll see real-time sensor values for each module printed every second, with timestamps.
+### 3. Open the dashboard
+Go to [http://localhost:4000/](http://localhost:4000/) in your browser.
+
+## Dashboard
+- Displays real-time sensor values for each module in a clean, color-coded table
+- Shows connection status (green for online, red for offline; shows "offline" if server is not running)
+- Highlights changing values for easy tracking
+- Shows sensor type for each sensor
 
 ## Docker
+- See earlier instructions for Dockerfile and docker-compose usage
 
-### Build and run with Docker
-```
-docker build -t plc-mock-server .
-docker run --rm -it -p 3000:3000 plc-mock-server
-```
-
-### Using docker-compose
-```
-docker-compose up --build
-```
-
-### Environment-based configuration
-You can override the config file path and port using environment variables:
-- `CONFIG_PATH`: Path to your config file (default: `/app/config.json`)
-- `PORT`: Server port (default: `3000`)
-
-Example:
-```
-docker run --rm -it -p 3000:3000 -e CONFIG_PATH=/app/config.json -e PORT=3000 plc-mock-server
-```
-
-## Example Output
-```
-PLC Mock Server started.
-Server connection parameters: host=127.0.0.1, port=3000
---- Module1 ---
-[2024-05-10T12:34:56.789Z] Module1_Sensor1: 10.144
-[2024-05-10T12:34:56.789Z] Module1_Sensor2: 6.307
-[2024-05-10T12:34:56.789Z] Module1_Sensor3: 3.030
---- Module2 ---
-[2024-05-10T12:34:56.789Z] Module2_Sensor1: 12.824
-[2024-05-10T12:34:56.789Z] Module2_Sensor2: 7.517
-[2024-05-10T12:34:56.789Z] Module2_Sensor3: 11.060
-```
+## What Was Implemented
+- **All core requirements** (modular server, sensor simulation, config, real-time updates)
+- **Bonus: Advanced sensor types** (sinusoidal, noisy sinusoidal, square wave)
+- **Bonus: Docker containerization** (Dockerfile, docker-compose, env config)
+- **Bonus: Real-time dashboard** (see above for features)
 
 ## Configuration File (`config.json`)
-- `server`: Host and port (for future network features)
+- `server`: Host and port
 - `updateIntervalMs`: How often to update sensor values (ms)
 - `modules`: List of modules, each with 3 sensors and their parameters
 
@@ -77,4 +52,3 @@ Feel free to fork, clone, and experiment!
 
 ---
 
-**Questions?** Just check the code or config—everything is designed to be clear and easy to extend.

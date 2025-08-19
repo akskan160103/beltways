@@ -1,1 +1,88 @@
-<h1>Hello World</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLC Mock Server Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1 { color: #333; }
+    .status { margin-bottom: 1rem; }
+    .status-online { color: #2e7d32; font-weight: bold; }
+    .status-offline { color: #c62828; font-weight: bold; }
+    .updating { font-size: 0.9em; color: #888; margin-left: 1em; }
+    .module-header { font-size: 1.3em; font-weight: bold; margin-top: 2.5rem; margin-bottom: 0.5rem; color: #1976d2; letter-spacing: 1px; }
+    table { border-collapse: collapse; width: 100%; background: #fff; margin-bottom: 2rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem 1rem; text-align: left; }
+    th { background: #eee; }
+    .highlight { background: #fff59d !important; transition: background 0.5s; }
+    footer { margin-top: 2rem; text-align: center; color: #888; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>PLC Mock Server Dashboard</h1>
+  <div class="status">
+    <strong>Connection status:</strong> <span id="connection">...</span>
+    <span id="updating" class="updating" style="display:none;">updating...</span><br>
+    <strong>Last update:</strong> <span id="timestamp">...</span>
+  </div>
+  <div id="modules"></div>
+  <footer>
+    Beltways Mock PLC Server &mdash; Real-time Dashboard Demo
+  </footer>
+  <script>
+    let lastValues = {};
+    async function fetchStatus() {
+      document.getElementById('updating').style.display = 'inline';
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        const connElem = document.getElementById('connection');
+        connElem.textContent = data.connection;
+        connElem.className = data.connection === 'online' ? 'status-online' : 'status-offline';
+        document.getElementById('timestamp').textContent = data.timestamp;
+        const modulesDiv = document.getElementById('modules');
+        modulesDiv.innerHTML = '';
+        data.modules.forEach(module => {
+          // Module header
+          const header = document.createElement('div');
+          header.className = 'module-header';
+          header.textContent = module.name;
+          modulesDiv.appendChild(header);
+
+          // Table
+          const table = document.createElement('table');
+          const thead = document.createElement('thead');
+          thead.innerHTML = '<tr><th>Sensor</th><th>Type</th><th>Value</th></tr>';
+          table.appendChild(thead);
+          const tbody = document.createElement('tbody');
+          module.sensors.forEach(sensor => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${sensor.name}</td><td>${sensor.type || ''}</td><td id="${module.name}_${sensor.name}">${sensor.value.toFixed(3)}</td>`;
+            tbody.appendChild(row);
+            // Highlight if value changed
+            const key = `${module.name}_${sensor.name}`;
+            if (lastValues[key] !== undefined && lastValues[key] !== sensor.value) {
+              const cell = row.children[2];
+              cell.classList.add('highlight');
+              setTimeout(() => cell.classList.remove('highlight'), 500);
+            }
+            lastValues[key] = sensor.value;
+          });
+          table.appendChild(tbody);
+          modulesDiv.appendChild(table);
+        });
+      } catch (err) {
+        const connElem = document.getElementById('connection');
+        connElem.textContent = 'offline';
+        connElem.className = 'status-offline';
+        document.getElementById('timestamp').textContent = '...';
+        document.getElementById('modules').innerHTML = '<em>Unable to fetch data from server.</em>';
+      }
+      document.getElementById('updating').style.display = 'none';
+    }
+    setInterval(fetchStatus, 1000);
+    fetchStatus();
+  </script>
+</body>
+</html>

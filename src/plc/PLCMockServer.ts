@@ -77,9 +77,10 @@ export class PLCMockServer {
         connection: 'online',
         modules: this.modules.map((mod) => ({
           name: mod.name,
-          sensors: mod.sensors.map((sensor) => ({
+          sensors: mod.sensors.map((sensor, i) => ({
             name: sensor.name,
             value: sensor.getValue(now),
+            type: mod.sensorConfigs[i]?.type || '',
           })),
         })),
       };

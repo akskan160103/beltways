@@ -1,6 +1,6 @@
 # Time Log
 
-**Total time so far:** 1 hr 40 min
+**Total time:** ~3 hours 30 min
 
 ## Breakdown by Spec Section
 
@@ -16,5 +16,18 @@
 ### 4. Real-time Data Updates
 - Real-time update logic, timestamp management, output formatting: **20 min**
 
+### Bonus: Advanced Sensor Types
+- Noisy sinusoidal, square wave, config extensibility: **20 min**
+
+### Bonus: Docker Containerization
+- Dockerfile, docker-compose, env config, README updates: **20 min**
+
+### Bonus: Real-time Dashboard
+- Express API, frontend, polish, troubleshooting, and UI tweaks: **50 min**
+
 ### General Cleanup, Commits, and Q&A
-- Repo hygiene, .gitignore, commit messages, clarifications: **10 min**
+- Repo hygiene, .gitignore, commit messages, clarifications, wrap-up: **30 min**
+
+## Summary
+- All core requirements implemented
+- Bonus: Advanced sensor types, Docker containerization, real-time dashboard (no config changes, no historical data)
